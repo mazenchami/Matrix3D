@@ -1,76 +1,143 @@
 import { observer } from "mobx-react-lite"
-import React, { FC } from "react"
-import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { Text } from "../components"
-import { isRTL } from "../i18n"
+import React, { FC, useCallback } from "react"
+import { Dimensions, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { Button, Screen, Text, TextField } from "../components"
+import { NumericTextInput } from "../components/NumericTextInput"
 import { colors, spacing } from "../theme"
-import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 
 const welcomeLogo = require("../../assets/images/logo.png")
-const welcomeFace = require("../../assets/images/welcome-face.png")
+
+const defaultTransformValues = {
+  a1: "0.4",
+  b1: "0",
+  c1: "0.5",
+  d1: "1.2",
+  a2: "0",
+  b2: "0",
+  c2: "0",
+  d2: "0",
+  a3: "0",
+  b3: "0",
+  c3: "1",
+  d3: "0",
+  a4: "60",
+  b4: "10",
+  c4: "0",
+  d4: "1",
+}
 
 export const WelcomeScreen: FC = observer(function WelcomeScreen() {
-  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
+  const [transformValues, setTransformValues] = React.useReducer(
+    (data, partialData) => ({ ...data, ...partialData }),
+    defaultTransformValues,
+  )
+  const [matrixValues, setMatrixValues] = React.useState([
+    transformValues.a1,
+    transformValues.b1,
+    0,
+    0,
+    transformValues.c1,
+    transformValues.d1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    60, // transformValues.a2,
+    10, // transformValues.b2,
+    0,
+    1,
+  ])
+
+  const onGenerate = useCallback(() => {
+    setMatrixValues([
+      transformValues.a1,
+      transformValues.b1,
+      0,
+      0,
+      transformValues.c1,
+      transformValues.d1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      60, // transformValues.a2,
+      10, // transformValues.b2,
+      0,
+      1,
+    ])
+  }, [])
 
   return (
-    <View style={$container}>
-      <View style={$topContainer}>
-        <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
-        <Text
-          testID="welcome-heading"
-          style={$welcomeHeading}
-          tx="welcomeScreen.readyForLaunch"
-          preset="heading"
+    <Screen
+      preset="fixed"
+      safeAreaEdges={["top", "bottom"]}
+      contentContainerStyle={$contentContainer}
+    >
+      <Text preset="heading" text="Matrix3D" />
+      <View style={$fieldsContainer}>
+        {Object.keys(defaultTransformValues).map((key) => (
+          <NumericTextInput
+            containerStyle={$field}
+            key={key}
+            label={key}
+            onUpdate={(value) => {
+              setTransformValues({ [key]: value })
+            }}
+            value={transformValues[key]}
+          />
+        ))}
+        <Button onPress={onGenerate} preset="filled" text="Generate!" />
+      </View>
+      <View style={$welcomeLogoContainer}>
+        <Image
+          style={[
+            $welcomeLogo,
+            {
+              transform: [
+                {
+                  matrix: matrixValues.map((value) => Number(value)),
+                },
+              ],
+            },
+          ]}
+          source={welcomeLogo}
+          resizeMode="contain"
         />
-        <Text tx="welcomeScreen.exciting" preset="subheading" />
-        <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
       </View>
-
-      <View style={[$bottomContainer, $bottomContainerInsets]}>
-        <Text tx="welcomeScreen.postscript" size="md" />
-      </View>
-    </View>
+    </Screen>
   )
 })
 
-const $container: ViewStyle = {
-  flex: 1,
+const $contentContainer: ViewStyle = {
   backgroundColor: colors.background,
+  flex: 1,
+  justifyContent: "space-between",
+  paddingHorizontal: spacing.large,
+  paddingTop: spacing.extraLarge,
 }
 
-const $topContainer: ViewStyle = {
-  flexShrink: 1,
-  flexGrow: 1,
-  flexBasis: "57%",
-  justifyContent: "center",
-  paddingHorizontal: spacing.large,
+const $fieldsContainer: ViewStyle = {
+  flexDirection: "row",
+  flexWrap: "wrap",
 }
 
-const $bottomContainer: ViewStyle = {
-  flexShrink: 1,
-  flexGrow: 0,
-  flexBasis: "43%",
-  backgroundColor: colors.palette.neutral100,
-  borderTopLeftRadius: 16,
-  borderTopRightRadius: 16,
-  paddingHorizontal: spacing.large,
-  justifyContent: "space-around",
+const $field: TextStyle = {
+  marginEnd: spacing.small,
+  marginBottom: spacing.medium,
+  width: Dimensions.get("window").width / 4 - spacing.large,
 }
+
 const $welcomeLogo: ImageStyle = {
   height: 88,
-  width: "100%",
   marginBottom: spacing.huge,
+  width: "100%",
 }
 
-const $welcomeFace: ImageStyle = {
-  height: 169,
-  width: 269,
-  position: "absolute",
-  bottom: -47,
-  right: -80,
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
-}
-
-const $welcomeHeading: TextStyle = {
-  marginBottom: spacing.medium,
+const $welcomeLogoContainer: ViewStyle = {
+  flex: 1,
+  justifyContent: "center",
 }
