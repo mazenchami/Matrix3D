@@ -9,25 +9,25 @@ interface NumberFormatConfig {
 
 export interface NumbericTextInputProps {
   /**
-   * (value) => void (required) - called when the value of the TextInput changes.
+   * Style overrides for the container
    */
-  onUpdate: (value?: number) => void
+  containerStyle?: StyleProp<ViewStyle>
   /**
    * label: string (required) - The label text to display
    */
   label: string
   /**
+   * (value) => void (required) - called when the value of the TextInput changes.
+   */
+  onUpdate: (value?: number) => void
+  /**
    * value: number (required) - if not provided, will default to 0.
    */
   value: number
-  /**
-   * Style overrides for the container
-   */
-  containerStyle?: StyleProp<ViewStyle>
 }
 
 export function NumericTextInput(props: NumbericTextInputProps) {
-  const { containerStyle, onUpdate, label, value } = props
+  const { containerStyle, label, onUpdate, value } = props
 
   const formatConfig = React.useMemo<NumberFormatConfig>(
     () => ({

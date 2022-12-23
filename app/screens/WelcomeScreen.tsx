@@ -5,7 +5,7 @@ import { Button, Screen, Text } from "../components"
 import { NumericTextInput } from "../components/NumericTextInput"
 import { colors, spacing } from "../theme"
 
-const welcomeLogo = require("../../assets/images/logo.png")
+const rnrLogo = require("../../assets/images/rnr-logo.png")
 
 const defaultTransformValues = {
   a1: "0.4",
@@ -92,10 +92,10 @@ export const WelcomeScreen: FC = observer(function WelcomeScreen() {
         ))}
         <Button onPress={onGenerate} preset="filled" text="Generate!" />
       </View>
-      <View style={$welcomeLogoContainer}>
+      <View style={$rnrLogoContainer}>
         <Image
           style={[
-            $welcomeLogo,
+            $rnrLogo,
             {
               transform: [
                 {
@@ -104,7 +104,7 @@ export const WelcomeScreen: FC = observer(function WelcomeScreen() {
               ],
             },
           ]}
-          source={welcomeLogo}
+          source={rnrLogo}
           resizeMode="contain"
         />
       </View>
@@ -131,13 +131,13 @@ const $field: TextStyle = {
   width: Dimensions.get("window").width / 4 - spacing.large,
 }
 
-const $welcomeLogo: ImageStyle = {
+const $rnrLogo: ImageStyle = {
   height: 88,
   marginBottom: spacing.huge,
   width: "100%",
 }
 
-const $welcomeLogoContainer: ViewStyle = {
+const $rnrLogoContainer: ViewStyle = {
   flex: 1,
   justifyContent: "center",
 }
