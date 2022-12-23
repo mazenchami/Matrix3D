@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useCallback } from "react"
 import { Dimensions, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { Button, Screen, Text, TextField } from "../components"
+import { Button, Screen, Text } from "../components"
 import { NumericTextInput } from "../components/NumericTextInput"
 import { colors, spacing } from "../theme"
 
