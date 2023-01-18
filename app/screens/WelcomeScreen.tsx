@@ -8,68 +8,65 @@ import { colors, spacing } from "../theme"
 const rnrLogo = require("../../assets/images/rnr-logo.png")
 
 const defaultTransformValues = {
-  a1: "0.4",
-  b1: "0",
-  c1: "0.5",
-  d1: "1.2",
-  a2: "0",
-  b2: "0",
-  c2: "0",
-  d2: "0",
-  a3: "0",
-  b3: "0",
-  c3: "1",
-  d3: "0",
-  a4: "60",
-  b4: "10",
-  c4: "0",
-  d4: "1",
+  a1: 1,
+  b1: 0,
+  c1: 0,
+  d1: 0,
+  a2: 0,
+  b2: 1,
+  c2: 0,
+  d2: 0,
+  a3: 0,
+  b3: 0,
+  c3: 1,
+  d3: 0,
+  a4: 0,
+  b4: 0,
+  c4: 0,
+  d4: 1,
 }
 
 export const WelcomeScreen: FC = observer(function WelcomeScreen() {
-  const [transformValues, setTransformValues] = React.useReducer(
-    (data, partialData) => ({ ...data, ...partialData }),
-    defaultTransformValues,
-  )
-  const [matrixValues, setMatrixValues] = React.useState([
+  const [transformValues, setTransformValues] = React.useState(defaultTransformValues)
+  const [matrixValues, setMatrixValues] = React.useState<number[]>([
     transformValues.a1,
     transformValues.b1,
-    0,
-    0,
     transformValues.c1,
     transformValues.d1,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    60, // transformValues.a2,
-    10, // transformValues.b2,
-    0,
-    1,
+    transformValues.a2,
+    transformValues.b2,
+    transformValues.c2,
+    transformValues.d2,
+    transformValues.a3,
+    transformValues.b3,
+    transformValues.c3,
+    transformValues.d3,
+    transformValues.a4,
+    transformValues.b4,
+    transformValues.c4,
+    transformValues.d4,
   ])
 
   const onGenerate = useCallback(() => {
     setMatrixValues([
       transformValues.a1,
       transformValues.b1,
-      0,
-      0,
       transformValues.c1,
       transformValues.d1,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      60, // transformValues.a2,
-      10, // transformValues.b2,
-      0,
-      1,
+      transformValues.a2,
+      transformValues.b2,
+      transformValues.c2,
+      transformValues.d2,
+      transformValues.a3,
+      transformValues.b3,
+      transformValues.c3,
+      transformValues.d3,
+      transformValues.a4,
+      transformValues.b4,
+      transformValues.c4,
+      transformValues.d4,
     ])
-  }, [])
+  }, [transformValues])
 
   return (
     <Screen
@@ -85,7 +82,7 @@ export const WelcomeScreen: FC = observer(function WelcomeScreen() {
             key={key}
             label={key}
             onUpdate={(value) => {
-              setTransformValues({ [key]: value })
+              setTransformValues({ ...transformValues, [key]: value })
             }}
             value={transformValues[key]}
           />
@@ -99,7 +96,7 @@ export const WelcomeScreen: FC = observer(function WelcomeScreen() {
             {
               transform: [
                 {
-                  matrix: matrixValues.map((value) => Number(value)),
+                  matrix: matrixValues,
                 },
               ],
             },
